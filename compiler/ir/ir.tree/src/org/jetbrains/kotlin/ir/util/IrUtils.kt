@@ -299,6 +299,12 @@ fun IrSimpleFunction.resolveFakeOverride(): IrSimpleFunction? {
     return collectRealOverrides().singleOrNull { it.modality != Modality.ABSTRACT }
 }
 
+// This function uses `firstOrNull` while `resolveFakeOverride` uses `singleOrNull`.
+// Normally there should only be one fake-overridden implementation, but currently this is not the case due to bugs (e.g., KT-36188).
+fun IrSimpleFunction.resolveFakeOverrideWithBugCompatibility(): IrSimpleFunction? {
+    return collectRealOverrides().firstOrNull { it.modality != Modality.ABSTRACT }
+}
+
 fun IrSimpleFunction.isOrOverridesSynthesized(): Boolean {
     if (isSynthesized) return true
 
